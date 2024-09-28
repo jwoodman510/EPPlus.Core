@@ -42,6 +42,7 @@ using System.Drawing.Imaging;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Style.XmlAccess;
 using OfficeOpenXml.Table;
+using SkiaSharp;
 namespace EPPlusSamples
 {
     /// <summary>
@@ -226,7 +227,7 @@ namespace EPPlusSamples
             using (ExcelRange r = ws.Cells["A1:O1"])
             {
                 r.Merge = true;
-                r.Style.Font.SetFromFont(new Font("Arial", 22, FontStyle.Regular));
+                r.Style.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Arial"), 22));
                 r.Style.Font.Color.SetColor(Color.White);
                 r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
                 r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -324,7 +325,7 @@ namespace EPPlusSamples
                 using (ExcelRange r = ws.Cells[row, 1, row, 2])
                 {
                     r.Merge = true;
-                    r.Style.Font.SetFromFont(new Font("Arial", 16, FontStyle.Italic));
+                    r.Style.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Arial", SKFontStyle.Italic), 16));
                     r.Style.Font.Color.SetColor(Color.White);
                     r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
                     r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -339,7 +340,7 @@ namespace EPPlusSamples
             ws.Cells[row, 2].Value = propertyName;
             using (ExcelRange r = ws.Cells[row, 1, row, 2])
             {
-                r.Style.Font.SetFromFont(new Font("Arial", 12, FontStyle.Bold));
+                r.Style.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold), 12));
             }
 
             row++;
@@ -418,7 +419,7 @@ namespace EPPlusSamples
             Console.WriteLine("Directory " + dir.Name);
             if (!skipIcons)
             {
-                Bitmap icon = GetIcon(dir.FullName);
+                var icon = GetIcon(dir.FullName);
 
                 ws.Row(row).Height = height;
                 //Add the icon as a picture
@@ -452,7 +453,7 @@ namespace EPPlusSamples
             {
                 if (!skipIcons)
                 {
-                    Bitmap fileIcon = GetIcon(file.FullName);
+                    var fileIcon = GetIcon(file.FullName);
 
                     ws.Row(row).Height = height;
                     if (fileIcon != null)
@@ -525,12 +526,11 @@ namespace EPPlusSamples
         /// </summary>
         /// <param name="FileName"></param>
         /// <returns></returns>
-        private static Bitmap GetIcon(string FileName)
+        private static SKImage GetIcon(string FileName)
         {
             if (File.Exists(FileName))
             {
-                var bmp=System.Drawing.Icon.ExtractAssociatedIcon(FileName).ToBitmap();
-                return new Bitmap(bmp, new Size(16, 16));
+                return SKImage.FromEncodedData(FileName);
             }
             else
             {

@@ -33,6 +33,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using SkiaSharp;
 
 namespace OfficeOpenXml.Style
 {
@@ -213,15 +214,14 @@ namespace OfficeOpenXml.Style
         /// Set the font from a Font object
         /// </summary>
         /// <param name="Font"></param>
-        public void SetFromFont(Font Font)
+        public void SetFromFont(SKFont Font)
         {
-            Name = Font.Name;
-            //Family=fnt.FontFamily.;
+            Name = Font.Typeface.FamilyName;
             Size = (int)Font.Size;
-            Strike = Font.Strikeout;
-            Bold = Font.Bold;
-            UnderLine = Font.Underline;
-            Italic = Font.Italic;
+            Strike = Font.Metrics.StrikeoutPosition != null;
+            Bold = Font.Typeface.IsBold;
+            UnderLine = Font.Metrics.UnderlinePosition != null;
+            Italic = Font.Typeface.IsItalic;
         }
 
         internal override string Id

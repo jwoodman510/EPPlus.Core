@@ -18,6 +18,7 @@ using System.Dynamic;
 using System.Globalization;
 using OfficeOpenXml.Drawing;
 using OfficeOpenXml.FormulaParsing;
+using SkiaSharp;
 
 namespace EPPlusTest
 {
@@ -1905,7 +1906,7 @@ namespace EPPlusTest
             {
                 ExcelWorkbook wb = package.Workbook;
                 ExcelWorksheet sh = wb.Worksheets[1];
-                System.Drawing.Image img_ = System.Drawing.Image.FromFile(@"C:\temp\img\background.gif");
+                var img_ = SKImage.FromEncodedData(@"C:\temp\img\background.gif");
                 ExcelPicture pic = sh.Drawings.AddPicture("logo", img_);
                 pic.SetPosition(1, 1);
 
@@ -2046,7 +2047,7 @@ namespace EPPlusTest
                 int row = 1;
                 foreach (var f in Directory.EnumerateFiles(@"c:\temp\addin_temp\Addin\img\open_icon_library-full\icons\ico\16x16\actions\"))
                 {
-                    var b = new Bitmap(f);
+                    var b = SKImage.FromEncodedData(f);
                     var pic = ws.Drawings.AddPicture($"Image{(row + 1) / 2}", b);
                     pic.SetPosition(row, 0, 0, 0);
                     row += 2;

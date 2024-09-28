@@ -15,6 +15,7 @@ using System.Reflection;
 using OfficeOpenXml.Table;
 using System.Threading;
 using System.Globalization;
+using SkiaSharp;
 
 namespace EPPlusTest
 {
@@ -1883,7 +1884,7 @@ namespace EPPlusTest
             using (ExcelRange r = ws.Cells["A1:F1"])
             {
                 r.Merge = true;
-                r.Style.Font.SetFromFont(new Font("Arial", 18, FontStyle.Italic));
+                r.Style.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Arial", SKFontStyle.Italic), 18));
                 r.Style.Font.Color.SetColor(Color.DarkRed);
                 r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
                 //r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -2303,7 +2304,7 @@ namespace EPPlusTest
 
             var secondNamedStyle = _pck.Workbook.Styles.CreateNamedStyle("first", firstNamedStyle.Style).Style;
             secondNamedStyle.Font.Bold = true;
-            secondNamedStyle.Font.SetFromFont(new Font("Arial Black", 8));
+            secondNamedStyle.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Arial Black"), 8));
             secondNamedStyle.Border.Bottom.Style = ExcelBorderStyle.Medium;
             secondNamedStyle.Border.Left.Style = ExcelBorderStyle.Medium;
 

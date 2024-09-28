@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 namespace EPPlusTest.Properties {
+    using SkiaSharp;
     using System;
     using System.Drawing;
     using System.IO;
@@ -72,7 +73,7 @@ namespace EPPlusTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Test1 {
+        internal static SkiaSharp.SKImage Test1 {
             get {
 #if (Core)                
                 string path = AppContext.BaseDirectory;
@@ -80,11 +81,11 @@ namespace EPPlusTest.Properties {
                 {
                     path = new DirectoryInfo(path + "\\..").FullName;
                 }
-                object obj = Image.FromFile(path + "\\Resources\\Test1.jpg");
+                object obj = SKImage.FromEncodedData(path + "\\Resources\\Test1.jpg");
 #else
                 object obj = ResourceManager.GetObject("Test1", resourceCulture);
 #endif
-                return ((System.Drawing.Bitmap)(obj));
+                return ((SkiaSharp.SKImage)(obj));
             }
         }
     }

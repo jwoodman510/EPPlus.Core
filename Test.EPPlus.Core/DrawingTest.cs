@@ -10,6 +10,7 @@ using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 using System.Diagnostics;
 using System.Reflection;
+using SkiaSharp;
 
 namespace EPPlusTest
 {
@@ -282,7 +283,7 @@ namespace EPPlusTest
             ser.DataLabel.Fill.Color = Color.BlueViolet;
             ser.DataLabel.Font.Color = Color.White;
             ser.DataLabel.Font.Italic = true;
-            ser.DataLabel.Font.SetFromFont(new Font("bookman old style", 8));
+            ser.DataLabel.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("bookman old style"), 8));
             Assert.IsTrue(chrt.ChartType == eChartType.XYScatterSmoothNoMarkers, "Invalid Charttype");
             chrt.Series[0].Header = "Test serie";
             chrt = ws.Drawings.AddChart("ScatterChart2", eChartType.XYScatterSmooth) as ExcelScatterChart;
@@ -600,8 +601,8 @@ namespace EPPlusTest
             (ws.Drawings["shape2"] as ExcelShape).TextVertical = eTextVerticalType.Vertical;
             rt = (ws.Drawings["shape2"] as ExcelShape).RichText.Add("\r\nAdded formated richtext");
             rt.Bold = true;
-            rt.Color = Color.DarkGoldenrod ;
-            rt.SetFromFont(new Font("Times new roman", 18, FontStyle.Underline));
+            rt.Color = Color.DarkGoldenrod;
+            rt.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Times new roman"), 18));
             rt.UnderLineColor = Color.Green;
 
 
