@@ -51,7 +51,7 @@ namespace EPPlusSamples
 			using (ExcelPackage package = new ExcelPackage(existingFile))
 			{
                 // get the first worksheet in the workbook
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                 int col = 2; //The item description
 				// output the data in column 2
 				for (int row = 2; row < 5; row++)

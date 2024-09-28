@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <Version>0.1.0</Version>
+    <PackageLicenseUrl>https://github.com/jwoodman510/EPPlus.Core/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/jwoodman510/EPPlus.Core</PackageProjectUrl>
+    <Authors>Jordan Woodman</Authors>
+    <Company></Company>
+    <Product>EPPlus.Core</Product>
+    <Description>Create advanced Excel spreadsheets using .NET</Description>
+    <AssemblyName>EPPlus</AssemblyName>
+    <RootNamespace>EPPlus</RootNamespace>
+    <RepositoryUrl>https://github.com/jwoodman510/EPPlus.Core</RepositoryUrl>
+    <PackageTags>Excel ooxml</PackageTags>
+    <Copyright>Jordan Woodman 2024</Copyright>
+    <PackageReleaseNotes>
+      # {{ PLACEHOLDER }}
+    </PackageReleaseNotes>
+    <DefineConstants>Core</DefineConstants>
+    <PackageId>EPPlus.Core</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="EPPlusTest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
+  </ItemGroup>
+</Project>

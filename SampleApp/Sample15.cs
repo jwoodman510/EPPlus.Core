@@ -141,7 +141,7 @@ namespace EPPlusSamples
             //Password protect your code
             pck.Workbook.VbaProject.Protection.SetPassword("EPPlus");
 
-            var codeDir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "VBA-Code");
+            var codeDir = new DirectoryInfo(AppContext.BaseDirectory + "VBA-Code");
 
             //Add all the code from the textfiles in the Vba-Code sub-folder.
             pck.Workbook.CodeModule.Code = GetCodeModule(codeDir, "ThisWorkbook.txt");

@@ -53,7 +53,7 @@ namespace EPPlusSamples
             using (ExcelPackage package = new ExcelPackage(newFile, templateFile))
             {
                 //Open worksheet 1
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                 worksheet.InsertRow(5, 2);
 
                 worksheet.Cells["A5"].Value = "12010";
