@@ -177,11 +177,11 @@ namespace EPPlusTest
                 Assert.AreEqual(ws.Cells["F5"].Style.Font.UnderLineType, ExcelUnderLineType.None);
                 Assert.AreEqual(ws.Cells["F5"].Style.Font.UnderLine, false);
 
-                Assert.AreEqual(ws.Cells["T20"].GetValue<string>(), 0.396180555555556d.ToString(CultureInfo.CurrentCulture));
+                Assert.AreEqual(ws.Cells["T20"].GetValue<string>(), 0.39618055555555554d.ToString(CultureInfo.CurrentCulture));
                 Assert.AreEqual(ws.Cells["T20"].GetValue<int>(), 0);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<int?>(), 0);
-                Assert.AreEqual(ws.Cells["T20"].GetValue<double>(), 0.396180555555556d);
-                Assert.AreEqual(ws.Cells["T20"].GetValue<double?>(), 0.396180555555556d);
+                Assert.AreEqual(ws.Cells["T20"].GetValue<double>(), 0.39618055555555554d);
+                Assert.AreEqual(ws.Cells["T20"].GetValue<double?>(), 0.39618055555555554d);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<decimal>(), 0.396180555555556m);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<decimal?>(), 0.396180555555556m);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<bool>(), true);
@@ -192,11 +192,11 @@ namespace EPPlusTest
                 Assert.AreEqual(ws.Cells["T20"].GetValue<TimeSpan?>(), new TimeSpan(693593, 9, 30, 30));
                 Assert.AreEqual(ws.Cells["T20"].Text, "09:30:30");
 
-                Assert.AreEqual(ws.Cells["T24"].GetValue<string>(), 1.39618055555556d.ToString(CultureInfo.CurrentCulture));
+                Assert.AreEqual(ws.Cells["T24"].GetValue<string>(), 1.3961805555555555d.ToString(CultureInfo.CurrentCulture));
                 Assert.AreEqual(ws.Cells["T24"].GetValue<int>(), 1);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<int?>(), 1);
-                Assert.AreEqual(ws.Cells["T24"].GetValue<double>(), 1.39618055555556d);
-                Assert.AreEqual(ws.Cells["T24"].GetValue<double?>(), 1.39618055555556d);
+                Assert.AreEqual(ws.Cells["T24"].GetValue<double>(), 1.3961805555555555d);
+                Assert.AreEqual(ws.Cells["T24"].GetValue<double?>(), 1.3961805555555555d);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<decimal>(), 1.39618055555556m);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<decimal?>(), 1.39618055555556m);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<bool>(), true);
