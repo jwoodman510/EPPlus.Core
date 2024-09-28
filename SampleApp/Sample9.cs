@@ -53,7 +53,7 @@ namespace EPPlusSamples
         /// <returns></returns>
         public static string RunSample9()
         {
-            FileInfo newFile = Utils.GetFileInfo(@"\sample9.xlsx");
+            FileInfo newFile = Utils.GetFileInfo(@"sample9.xlsx");
             
             using (ExcelPackage package = new ExcelPackage())
             {
@@ -75,7 +75,7 @@ namespace EPPlusSamples
             format.SkipLinesBeginning = 2;
             format.SkipLinesEnd = 1;
 
-            var csvDir= new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "csv"); 
+            var csvDir= new DirectoryInfo(AppContext.BaseDirectory + "csv"); 
 
             //Now read the file into the sheet. Start from cell A1. Create a table with style 27. First row contains the header.
             Console.WriteLine("Load the text file...");
@@ -143,7 +143,7 @@ namespace EPPlusSamples
 
             //Now read the file into the sheet.
             Console.WriteLine("Load the text file...");
-            var csvDir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "csv");
+            var csvDir = new DirectoryInfo(AppContext.BaseDirectory + "csv");
 
             var range = sheet.Cells["A1"].LoadFromText(Utils.GetFileInfo(csvDir, "Sample9-2.txt", false), format);
 

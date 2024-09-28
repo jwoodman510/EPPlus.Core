@@ -91,10 +91,10 @@ namespace EPPlusSamples
 
                 //Sample 6
                 //Creates an advanced report on a directory in the filesystem.
-                //Parameter 2 is the directory to report. Paramter 3 is how deep the scan will go. Parameter 4 Skips Icons if set to true (The icon handling is slow)
+                //Parameter 2 is the directory to report. Parameter 3 is how deep the scan will go. Parameter 4 Skips Icons if set to true (The icon handling is slow)
                 //This example demonstrates how to use outlines, tables,comments, shapes, pictures and charts.                
                 Console.WriteLine("Running sample 6");
-                output = Sample6.RunSample6(new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location).Parent, 5, false);
+                output = Sample6.RunSample6(new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location).Parent, 5, true);
                 Console.WriteLine("Sample 6 created:", output);
                 Console.WriteLine();
 
@@ -178,7 +178,6 @@ namespace EPPlusSamples
             var prevColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Genereted sample workbooks can be found in {Utils.OutputDir.FullName}");
-            Process.Start(Utils.OutputDir.FullName);
             Console.ForegroundColor = prevColor;
 
             Console.WriteLine();

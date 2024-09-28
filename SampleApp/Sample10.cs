@@ -142,7 +142,7 @@ namespace EPPlusSamples
                 //Quiz-template is done, now create the answer template and encrypt it...
                 using (var packageAnswers = new ExcelPackage(package.Stream))       //We use the stream from the template here to get a copy of it.
                 {
-                    var sheetAnswers = packageAnswers.Workbook.Worksheets[1];
+                    var sheetAnswers = packageAnswers.Workbook.Worksheets[0];
                     sheetAnswers.Cells["C7"].Value = "Stockholm";
                     sheetAnswers.Cells["C9"].Value = "Third";
                     sheetAnswers.Cells["C11"].Value = "Alfred";
@@ -154,7 +154,7 @@ namespace EPPlusSamples
                 //Ok, Since this is     qan example we create one user answer...
                 using (var packageAnswers = new ExcelPackage(package.Stream))
                 {
-                    var sheetUser = packageAnswers.Workbook.Worksheets[1];
+                    var sheetUser = packageAnswers.Workbook.Worksheets[0];
                     sheetUser.Cells["B3"].Value = "Jan Källman";
                     sheetUser.Cells["C7"].Value = "Bern";
                     sheetUser.Cells["C9"].Value = "Third";
@@ -169,8 +169,8 @@ namespace EPPlusSamples
             var packAnswers = new ExcelPackage(answerFile, "EPPlus");    //Supply the password, so the file can be decrypted
             var packUser =  new ExcelPackage(JKAnswerFile, "JK");        //Supply the password, so the file can be decrypted
 
-            var wsAnswers = packAnswers.Workbook.Worksheets[1];
-            var wsUser = packUser.Workbook.Worksheets[1];
+            var wsAnswers = packAnswers.Workbook.Worksheets[0];
+            var wsUser = packUser.Workbook.Worksheets[0];
 
             //Enumerate the three answers
             foreach (var cell in wsAnswers.Cells["C7,C9,C11"])

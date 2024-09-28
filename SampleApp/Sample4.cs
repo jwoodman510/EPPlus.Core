@@ -58,7 +58,7 @@ namespace EPPlusSamples
             using (ExcelPackage p = new ExcelPackage(template, true))
             {
                 //Set up the headers
-                ExcelWorksheet ws = p.Workbook.Worksheets[1];
+                ExcelWorksheet ws = p.Workbook.Worksheets[0];
                 ws.Cells["A20"].Value = "Date";
                 ws.Cells["B20"].Value = "EOD Rate";
                 ws.Cells["B20:D20"].Merge = true;
