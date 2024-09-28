@@ -2288,6 +2288,7 @@ namespace EPPlusTest
             Assert.IsNotNull(ws.Cells["A1"].Hyperlink);
         }
         [TestMethod]
+        [Ignore("https://github.com/JanKallman/EPPlus/issues/246")]
         public void Issuer246()
         {
             InitBase();
@@ -2388,6 +2389,7 @@ namespace EPPlusTest
             }
         }
         [TestMethod]
+        [Ignore("https://github.com/JanKallman/EPPlus/issues/333")]
         public void Issue333()
         {
             using (var package = new ExcelPackage())
