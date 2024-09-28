@@ -3009,12 +3009,9 @@ namespace EPPlusTest
         public void DateFunctionsWorkWithDifferentCultureDateFormats_US()
         {
             var currentCulture = CultureInfo.CurrentCulture;
-#if Core
+
             var us = CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-#else
-            var us = CultureInfo.CreateSpecificCulture("en-US");
-            Thread.CurrentThread.CurrentCulture = us;
-#endif
+
             double usEoMonth = 0d, usEdate = 0d;
             var thread = new Thread(delegate ()
             {
@@ -3034,11 +3031,7 @@ namespace EPPlusTest
             thread.Join();
             Assert.AreEqual(41654.0, usEoMonth);
             Assert.AreEqual(41670.0, usEdate);
-#if Core
             CultureInfo.DefaultThreadCurrentCulture = currentCulture;
-#else
-            Thread.CurrentThread.CurrentCulture = currentCulture;
-#endif
         }
 
         [TestMethod]
@@ -3046,12 +3039,7 @@ namespace EPPlusTest
         {
             var currentCulture = CultureInfo.CurrentCulture;
 
-#if Core
             var gb = CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-GB");
-#else
-            var gb = CultureInfo.CreateSpecificCulture("en-GB");
-            Thread.CurrentThread.CurrentCulture = gb;
-#endif
             double gbEoMonth = 0d, gbEdate = 0d;
             var thread = new Thread(delegate ()
             {
@@ -3070,11 +3058,8 @@ namespace EPPlusTest
             thread.Join();
             Assert.AreEqual(41654.0, gbEoMonth);
             Assert.AreEqual(41670.0, gbEdate);
-#if Core
+
             CultureInfo.DefaultThreadCurrentCulture = currentCulture;
-#else
-            Thread.CurrentThread.CurrentCulture = currentCulture;
-#endif
         }
         [TestMethod]
         public void Text()

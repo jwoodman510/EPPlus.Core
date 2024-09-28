@@ -44,11 +44,7 @@ namespace EPPlusTest.Properties {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EPPlusTest.Properties.Resources", 
-#if Core 
                         typeof(Resources).GetTypeInfo().Assembly);
-#else
-                        typeof(Resources).Assembly);
-#endif
 
                     resourceMan = temp;
                 }
@@ -74,17 +70,14 @@ namespace EPPlusTest.Properties {
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static SkiaSharp.SKImage Test1 {
-            get {
-#if (Core)                
+            get {      
                 string path = AppContext.BaseDirectory;
                 while (!Directory.Exists(path + "\\Resources"))
                 {
                     path = new DirectoryInfo(path + "\\..").FullName;
                 }
                 object obj = SKImage.FromEncodedData(path + "\\Resources\\Test1.jpg");
-#else
-                object obj = ResourceManager.GetObject("Test1", resourceCulture);
-#endif
+
                 return ((SkiaSharp.SKImage)(obj));
             }
         }
