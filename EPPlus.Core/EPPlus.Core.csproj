@@ -15,10 +15,10 @@
     <PackageTags>Excel ooxml</PackageTags>
     <Copyright>Jordan Woodman 2024</Copyright>
     <PackageReleaseNotes>
-      # {{ PLACEHOLDER }}
+      Initial Release
     </PackageReleaseNotes>
     <DefineConstants>Core</DefineConstants>
-    <PackageId>EPPlus.Core</PackageId>
+    <PackageId>Woodman.EPPlus.Core</PackageId>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
