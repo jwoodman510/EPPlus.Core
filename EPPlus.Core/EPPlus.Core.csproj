@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
     <Version>0.1.0</Version>
-    <PackageLicenseUrl>https://github.com/jwoodman510/EPPlus.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/jwoodman510/EPPlus.Core</PackageProjectUrl>
     <Authors>Jordan Woodman</Authors>
     <Company></Company>
