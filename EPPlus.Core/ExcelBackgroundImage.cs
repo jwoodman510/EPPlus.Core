@@ -40,6 +40,7 @@ using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Packaging;
 using OfficeOpenXml.Utils;
 using OfficeOpenXml.Compatibility;
+using SkiaSharp;
 
 namespace OfficeOpenXml
 {
@@ -66,7 +67,7 @@ namespace OfficeOpenXml
         /// The background image of the worksheet. 
         /// The image will be saved internally as a jpg.
         /// </summary>
-        public Image Image
+        public SKImage Image
         {
             get
             {
@@ -75,7 +76,7 @@ namespace OfficeOpenXml
                 {
                     var rel = _workSheet.Part.GetRelationship(relID);
                     var imagePart = _workSheet.Part.Package.GetPart(UriHelper.ResolvePartUri(rel.SourceUri, rel.TargetUri));
-                    return Image.FromStream(imagePart.GetStream());
+                    return SKImage.FromEncodedData(imagePart.GetStream());
                 }
                 return null;
             }
@@ -109,12 +110,12 @@ namespace OfficeOpenXml
         {
             DeletePrevImage();
 
-            Image img;
+            SKImage img;
             byte[] fileBytes;
             try
             {
                 fileBytes = File.ReadAllBytes(PictureFile.FullName);
-                img = Image.FromFile(PictureFile.FullName);
+                img = SKImage.FromEncodedData(PictureFile.FullName);
             }
             catch (Exception ex)
             {

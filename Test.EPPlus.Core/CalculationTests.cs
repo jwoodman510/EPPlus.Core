@@ -90,12 +90,9 @@ namespace EPPlusTest
         [TestMethod, Ignore]
         public void Calulation4()
         {
-#if Core
             var dir = AppContext.BaseDirectory;
             dir = Directory.GetParent(dir).Parent.Parent.Parent.FullName;
-#else
-            var dir = AppDomain.CurrentDomain.BaseDirectory;
-#endif
+
             var pck = new ExcelPackage(new FileInfo(Path.Combine(dir, "Workbooks", "FormulaTest.xlsx")));
             pck.Workbook.Calculate();
             Assert.AreEqual(490D, pck.Workbook.Worksheets[1].Cells["D5"].Value);
@@ -103,12 +100,9 @@ namespace EPPlusTest
         [TestMethod, Ignore]
         public void CalulationValidationExcel()
         {
-#if Core
             var dir = AppContext.BaseDirectory;
             dir = Directory.GetParent(dir).Parent.Parent.Parent.FullName;
-#else
-            var dir = AppDomain.CurrentDomain.BaseDirectory;
-#endif
+
             var pck = new ExcelPackage(new FileInfo(Path.Combine(dir, "Workbooks", "FormulaTest.xlsx")));
 
             var ws = pck.Workbook.Worksheets["ValidateFormulas"];

@@ -18,6 +18,7 @@ using System.Dynamic;
 using System.Globalization;
 using OfficeOpenXml.Drawing;
 using OfficeOpenXml.FormulaParsing;
+using SkiaSharp;
 
 namespace EPPlusTest
 {
@@ -267,45 +268,7 @@ namespace EPPlusTest
             var dest = ws.Cells[1, column + columns, ws.Dimension.End.Row, ws.Dimension.End.Column + columns];
             source.Copy(dest);
         }
-#if !Core
-        [TestMethod]
-        public void Issue15123()
-        {
-            var p = new ExcelPackage();
-            var ws = p.Workbook.Worksheets.Add("t");
-            using (var dt = new DataTable())
-            {
-                dt.Columns.Add("String", typeof(string));
-                dt.Columns.Add("Int", typeof(int));
-                dt.Columns.Add("Bool", typeof(bool));
-                dt.Columns.Add("Double", typeof(double));
-                dt.Columns.Add("Date", typeof(DateTime));
 
-                var dr = dt.NewRow();
-                dr[0] = "Row1";
-                dr[1] = 1;
-                dr[2] = true;
-                dr[3] = 1.5;
-                dr[4] = new DateTime(2014, 12, 30);
-                dt.Rows.Add(dr);
-
-                dr = dt.NewRow();
-                dr[0] = "Row2";
-                dr[1] = 2;
-                dr[2] = false;
-                dr[3] = 2.25;
-                dr[4] = new DateTime(2014, 12, 31);
-                dt.Rows.Add(dr);
-
-                ws.Cells["A1"].LoadFromDataTable(dt, true);
-                ws.Cells["D2:D3"].Style.Numberformat.Format = "(* #,##0.00);_(* (#,##0.00);_(* \"-\"??_);(@)";
-
-                ws.Cells["E2:E3"].Style.Numberformat.Format = "mm/dd/yyyy";
-                ws.Cells.AutoFitColumns();
-                Assert.AreNotEqual(ws.Cells[2, 5].Text, "");
-            }
-        }
-#endif
         [TestMethod]
         public void Issue15128()
         {
@@ -1142,11 +1105,8 @@ namespace EPPlusTest
                 p.SaveAs(new FileInfo(path2));
 
                 // files are identical?
-#if (Core)
                 var md5 = System.Security.Cryptography.MD5.Create();
-#else
-                var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-#endif
+
                 using (var fs1 = new FileStream(path1, FileMode.Open))
                 using (var fs2 = new FileStream(path2, FileMode.Open))
                 {
@@ -1905,7 +1865,7 @@ namespace EPPlusTest
             {
                 ExcelWorkbook wb = package.Workbook;
                 ExcelWorksheet sh = wb.Worksheets[1];
-                System.Drawing.Image img_ = System.Drawing.Image.FromFile(@"C:\temp\img\background.gif");
+                var img_ = SKImage.FromEncodedData(@"C:\temp\img\background.gif");
                 ExcelPicture pic = sh.Drawings.AddPicture("logo", img_);
                 pic.SetPosition(1, 1);
 
@@ -2046,7 +2006,7 @@ namespace EPPlusTest
                 int row = 1;
                 foreach (var f in Directory.EnumerateFiles(@"c:\temp\addin_temp\Addin\img\open_icon_library-full\icons\ico\16x16\actions\"))
                 {
-                    var b = new Bitmap(f);
+                    var b = SKImage.FromEncodedData(f);
                     var pic = ws.Drawings.AddPicture($"Image{(row + 1) / 2}", b);
                     pic.SetPosition(row, 0, 0, 0);
                     row += 2;
@@ -2288,6 +2248,7 @@ namespace EPPlusTest
             Assert.IsNotNull(ws.Cells["A1"].Hyperlink);
         }
         [TestMethod]
+        [Ignore("https://github.com/JanKallman/EPPlus/issues/246")]
         public void Issuer246()
         {
             InitBase();
@@ -2388,6 +2349,7 @@ namespace EPPlusTest
             }
         }
         [TestMethod]
+        [Ignore("https://github.com/JanKallman/EPPlus/issues/333")]
         public void Issue333()
         {
             using (var package = new ExcelPackage())

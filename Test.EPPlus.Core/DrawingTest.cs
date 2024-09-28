@@ -10,6 +10,7 @@ using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 using System.Diagnostics;
 using System.Reflection;
+using SkiaSharp;
 
 namespace EPPlusTest
 {
@@ -102,12 +103,6 @@ namespace EPPlusTest
             if (fi.Exists)
             {
                 pic = ws2.Drawings.AddPicture("Pic7", fi);
-            }
-            else
-            {
-#if (!Core)
-                TestContext.WriteLine("AG00021_.GIF does not exists. Skipping Pic7.");
-#endif
             }
 
             var wsCopy = _pck.Workbook.Worksheets.Add("Picture3", ws2);
@@ -282,7 +277,7 @@ namespace EPPlusTest
             ser.DataLabel.Fill.Color = Color.BlueViolet;
             ser.DataLabel.Font.Color = Color.White;
             ser.DataLabel.Font.Italic = true;
-            ser.DataLabel.Font.SetFromFont(new Font("bookman old style", 8));
+            ser.DataLabel.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("bookman old style"), 8));
             Assert.IsTrue(chrt.ChartType == eChartType.XYScatterSmoothNoMarkers, "Invalid Charttype");
             chrt.Series[0].Header = "Test serie";
             chrt = ws.Drawings.AddChart("ScatterChart2", eChartType.XYScatterSmooth) as ExcelScatterChart;
@@ -600,8 +595,8 @@ namespace EPPlusTest
             (ws.Drawings["shape2"] as ExcelShape).TextVertical = eTextVerticalType.Vertical;
             rt = (ws.Drawings["shape2"] as ExcelShape).RichText.Add("\r\nAdded formated richtext");
             rt.Bold = true;
-            rt.Color = Color.DarkGoldenrod ;
-            rt.SetFromFont(new Font("Times new roman", 18, FontStyle.Underline));
+            rt.Color = Color.DarkGoldenrod;
+            rt.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Times new roman"), 18));
             rt.UnderLineColor = Color.Green;
 
 
@@ -804,9 +799,6 @@ namespace EPPlusTest
                 {
                     if (d is ExcelChart)
                     {
-#if (!Core)
-                        TestContext.WriteLine(((ExcelChart)d).ChartType.ToString());
-#endif
                     }
                 }
             }
@@ -898,11 +890,7 @@ namespace EPPlusTest
         [TestMethod]
         public void AllDrawingsInsideMarkupCompatibility()
         {
-#if (Core)
             string workbooksDir = Path.Combine(AppContext.BaseDirectory, @"..\..\workbooks");
-#else
-            string workbooksDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\workbooks");
-#endif
 
             // This is codeplex issue 15028: Making an unrelated change to an Excel file that contains drawings that ALL exist
             // inside MarkupCompatibility/Choice nodes causes the drawings.xml file to be incorrectly garbage collected

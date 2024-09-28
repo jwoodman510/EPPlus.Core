@@ -15,6 +15,7 @@ using System.Reflection;
 using OfficeOpenXml.Table;
 using System.Threading;
 using System.Globalization;
+using SkiaSharp;
 
 namespace EPPlusTest
 {
@@ -177,11 +178,11 @@ namespace EPPlusTest
                 Assert.AreEqual(ws.Cells["F5"].Style.Font.UnderLineType, ExcelUnderLineType.None);
                 Assert.AreEqual(ws.Cells["F5"].Style.Font.UnderLine, false);
 
-                Assert.AreEqual(ws.Cells["T20"].GetValue<string>(), 0.396180555555556d.ToString(CultureInfo.CurrentCulture));
+                Assert.AreEqual(ws.Cells["T20"].GetValue<string>(), 0.39618055555555554d.ToString(CultureInfo.CurrentCulture));
                 Assert.AreEqual(ws.Cells["T20"].GetValue<int>(), 0);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<int?>(), 0);
-                Assert.AreEqual(ws.Cells["T20"].GetValue<double>(), 0.396180555555556d);
-                Assert.AreEqual(ws.Cells["T20"].GetValue<double?>(), 0.396180555555556d);
+                Assert.AreEqual(ws.Cells["T20"].GetValue<double>(), 0.39618055555555554d);
+                Assert.AreEqual(ws.Cells["T20"].GetValue<double?>(), 0.39618055555555554d);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<decimal>(), 0.396180555555556m);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<decimal?>(), 0.396180555555556m);
                 Assert.AreEqual(ws.Cells["T20"].GetValue<bool>(), true);
@@ -192,11 +193,11 @@ namespace EPPlusTest
                 Assert.AreEqual(ws.Cells["T20"].GetValue<TimeSpan?>(), new TimeSpan(693593, 9, 30, 30));
                 Assert.AreEqual(ws.Cells["T20"].Text, "09:30:30");
 
-                Assert.AreEqual(ws.Cells["T24"].GetValue<string>(), 1.39618055555556d.ToString(CultureInfo.CurrentCulture));
+                Assert.AreEqual(ws.Cells["T24"].GetValue<string>(), 1.3961805555555555d.ToString(CultureInfo.CurrentCulture));
                 Assert.AreEqual(ws.Cells["T24"].GetValue<int>(), 1);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<int?>(), 1);
-                Assert.AreEqual(ws.Cells["T24"].GetValue<double>(), 1.39618055555556d);
-                Assert.AreEqual(ws.Cells["T24"].GetValue<double?>(), 1.39618055555556d);
+                Assert.AreEqual(ws.Cells["T24"].GetValue<double>(), 1.3961805555555555d);
+                Assert.AreEqual(ws.Cells["T24"].GetValue<double?>(), 1.3961805555555555d);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<decimal>(), 1.39618055555556m);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<decimal?>(), 1.39618055555556m);
                 Assert.AreEqual(ws.Cells["T24"].GetValue<bool>(), true);
@@ -360,7 +361,7 @@ namespace EPPlusTest
                 Assert.AreEqual(r1.Bold, true);
 
                 ws = pck.Workbook.Worksheets["Pic URL"];
-                Assert.AreEqual(((ExcelPicture)ws.Drawings["Pic URI"]).Hyperlink, "http://epplus.codeplex.com");
+                Assert.AreEqual(((ExcelPicture)ws.Drawings["Pic URI"]).Hyperlink.ToString(), "http://epplus.codeplex.com");
 
                 Assert.AreEqual(pck.Workbook.Worksheets["Address"].GetValue<string>(40, 1), "\b\t");
 
@@ -1883,7 +1884,7 @@ namespace EPPlusTest
             using (ExcelRange r = ws.Cells["A1:F1"])
             {
                 r.Merge = true;
-                r.Style.Font.SetFromFont(new Font("Arial", 18, FontStyle.Italic));
+                r.Style.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Arial", SKFontStyle.Italic), 18));
                 r.Style.Font.Color.SetColor(Color.DarkRed);
                 r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
                 //r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -2303,7 +2304,7 @@ namespace EPPlusTest
 
             var secondNamedStyle = _pck.Workbook.Styles.CreateNamedStyle("first", firstNamedStyle.Style).Style;
             secondNamedStyle.Font.Bold = true;
-            secondNamedStyle.Font.SetFromFont(new Font("Arial Black", 8));
+            secondNamedStyle.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Arial Black"), 8));
             secondNamedStyle.Border.Bottom.Style = ExcelBorderStyle.Medium;
             secondNamedStyle.Border.Left.Style = ExcelBorderStyle.Medium;
 
@@ -3008,12 +3009,9 @@ namespace EPPlusTest
         public void DateFunctionsWorkWithDifferentCultureDateFormats_US()
         {
             var currentCulture = CultureInfo.CurrentCulture;
-#if Core
+
             var us = CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-#else
-            var us = CultureInfo.CreateSpecificCulture("en-US");
-            Thread.CurrentThread.CurrentCulture = us;
-#endif
+
             double usEoMonth = 0d, usEdate = 0d;
             var thread = new Thread(delegate ()
             {
@@ -3033,11 +3031,7 @@ namespace EPPlusTest
             thread.Join();
             Assert.AreEqual(41654.0, usEoMonth);
             Assert.AreEqual(41670.0, usEdate);
-#if Core
             CultureInfo.DefaultThreadCurrentCulture = currentCulture;
-#else
-            Thread.CurrentThread.CurrentCulture = currentCulture;
-#endif
         }
 
         [TestMethod]
@@ -3045,12 +3039,7 @@ namespace EPPlusTest
         {
             var currentCulture = CultureInfo.CurrentCulture;
 
-#if Core
             var gb = CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-GB");
-#else
-            var gb = CultureInfo.CreateSpecificCulture("en-GB");
-            Thread.CurrentThread.CurrentCulture = gb;
-#endif
             double gbEoMonth = 0d, gbEdate = 0d;
             var thread = new Thread(delegate ()
             {
@@ -3069,11 +3058,8 @@ namespace EPPlusTest
             thread.Join();
             Assert.AreEqual(41654.0, gbEoMonth);
             Assert.AreEqual(41670.0, gbEdate);
-#if Core
+
             CultureInfo.DefaultThreadCurrentCulture = currentCulture;
-#else
-            Thread.CurrentThread.CurrentCulture = currentCulture;
-#endif
         }
         [TestMethod]
         public void Text()

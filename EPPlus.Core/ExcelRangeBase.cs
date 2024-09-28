@@ -57,6 +57,7 @@ using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using w = System.Windows;
 using OfficeOpenXml.Utils;
 using OfficeOpenXml.Compatibility;
+using SkiaSharp;
 
 namespace OfficeOpenXml
 {
@@ -806,7 +807,7 @@ namespace OfficeOpenXml
             {
                 SetToSelectedRange();
             }
-            var fontCache = new Dictionary<int, Font>();
+            var fontCache = new Dictionary<int, SKFont>();
 
             bool doAdjust = _worksheet._package.DoAdjustDrawings;
             _worksheet._package.DoAdjustDrawings = false;
@@ -852,31 +853,17 @@ namespace OfficeOpenXml
                     afAddr[afAddr.Count - 1]._ws = WorkSheet;
                 }
             }
-
             var styles = _worksheet.Workbook.Styles;
             var nf = styles.Fonts[styles.CellXfs[0].FontId];
-            var fs = FontStyle.Regular;
-            if (nf.Bold) fs |= FontStyle.Bold;
-            if (nf.UnderLine) fs |= FontStyle.Underline;
-            if (nf.Italic) fs |= FontStyle.Italic;
-            if (nf.Strike) fs |= FontStyle.Strikeout;
-            var nfont = new Font(nf.Name, nf.Size, fs);
 
-            var normalSize = Convert.ToSingle(ExcelWorkbook.GetWidthPixels(nf.Name, nf.Size));
+            var weight = nf.Bold ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal;
+            var slant = nf.Italic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright;
 
-            Bitmap b;
-            Graphics g = null;
-            try
-            {
-                //Check for missing GDI+, then use WPF istead.
-                b = new Bitmap(1, 1);
-                g = Graphics.FromImage(b);
-                g.PageUnit = GraphicsUnit.Pixel;
-            }
-            catch
-            {
-                return;
-            }
+            var fontStyle = new SKFontStyle(weight, SKFontStyleWidth.Normal, slant);
+            var typeFace = SKTypeface.FromFamilyName(nf.Name, fontStyle);
+            var nfont = new SKFont(typeFace, nf.Size);
+
+            var normalSize = Convert.ToSingle(ExcelWorkbook.GetWidthPixels(nf.Name, nfont.Size));
 
             foreach (var cell in this)
             {
@@ -885,7 +872,7 @@ namespace OfficeOpenXml
 
                 if (cell.Merge == true || cell.Style.WrapText) continue;
                 var fntID = styles.CellXfs[cell.StyleID].FontId;
-                Font f;
+                SKFont f;
                 if (fontCache.ContainsKey(fntID))
                 {
                     f = fontCache[fntID];
@@ -893,12 +880,15 @@ namespace OfficeOpenXml
                 else
                 {
                     var fnt = styles.Fonts[fntID];
-                    fs = FontStyle.Regular;
-                    if (fnt.Bold) fs |= FontStyle.Bold;
-                    if (fnt.UnderLine) fs |= FontStyle.Underline;
-                    if (fnt.Italic) fs |= FontStyle.Italic;
-                    if (fnt.Strike) fs |= FontStyle.Strikeout;
-                    f = new Font(fnt.Name, fnt.Size, fs);
+
+                    //if (nf.UnderLine) fs |= FontStyle.Underline;
+                    //if (nf.Strike) fs |= FontStyle.Strikeout;
+                    var w = fnt.Bold ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal;
+                    var s = fnt.Italic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright;
+
+                    var fs = new SKFontStyle(w, SKFontStyleWidth.Normal, s);
+                    var tf = SKTypeface.FromFamilyName(fnt.Name, fs);
+                    f = new SKFont(typeFace, fnt.Size);
 
                     fontCache.Add(fntID, f);
                 }
@@ -906,7 +896,16 @@ namespace OfficeOpenXml
                 var textForWidth = cell.TextForWidth;
                 var t = textForWidth + (ind > 0 && !string.IsNullOrEmpty(textForWidth) ? new string('_', ind) : "");
                 if (t.Length > 32000) t = t.Substring(0, 32000); //Issue
-                var size = g.MeasureString(t, f, 10000, StringFormat.GenericDefault);
+
+                using var paint = new SKPaint
+                {
+                    Color = SKColors.Yellow,
+                    IsAntialias = true,
+                    TextSize = f.Size,
+                    Typeface = f.Typeface
+                };
+                var size = new SKRect();
+                paint.MeasureText(t, ref size);
 
                 double width;
                 double r = styles.CellXfs[cell.StyleID].TextRotation;

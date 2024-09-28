@@ -88,6 +88,11 @@ namespace EPPlusTest
 
         protected void SaveWorksheet(string name)
         {
+            if (!Directory.Exists(_worksheetPath))
+            {
+                Directory.CreateDirectory(_worksheetPath);
+            }
+
             if (_pck.Workbook.Worksheets.Count == 0) return;
             var fi = new FileInfo(_worksheetPath + name);
             if (fi.Exists)

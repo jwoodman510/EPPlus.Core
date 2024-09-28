@@ -35,6 +35,7 @@ using System.Text;
 using System.Xml;
 using System.Globalization;
 using System.Drawing;
+using SkiaSharp;
 
 
 namespace OfficeOpenXml.Drawing.Vml
@@ -133,7 +134,7 @@ namespace OfficeOpenXml.Drawing.Vml
         /// <summary>
         /// The image
         /// </summary>
-        public Image Image
+        public SKImage Image
         {
             get
             {
@@ -141,7 +142,7 @@ namespace OfficeOpenXml.Drawing.Vml
                 if (pck.PartExists(ImageUri))
                 {
                     var part = pck.GetPart(ImageUri);
-                    return Image.FromStream(part.GetStream());
+                    return SKImage.FromEncodedData(part.GetStream());
                 }
                 else
                 {

@@ -36,6 +36,7 @@ using System.Text;
 using System.Xml;
 using OfficeOpenXml.Drawing;
 using System.Drawing;
+using SkiaSharp;
 
 namespace OfficeOpenXml.Style
 {
@@ -293,15 +294,35 @@ namespace OfficeOpenXml.Style
         /// Set the font style from a font object
         /// </summary>
         /// <param name="Font"></param>
-        public void SetFromFont(Font Font)
+        public void SetFromFont(SKFont Font)
         {
-            LatinFont = Font.Name;
-            ComplexFont = Font.Name;
+            LatinFont = Font.Typeface.FamilyName;
+            ComplexFont = Font.Typeface.FamilyName;
             Size = Font.Size;
-            if (Font.Bold) Bold = Font.Bold;
-            if (Font.Italic) Italic = Font.Italic;
-            if (Font.Underline) UnderLine = eUnderLineType.Single;
-            if (Font.Strikeout) Strike = eStrikeType.Single;
+            Strike = GetStrike(Font);
+            if (Font.Typeface.IsBold) Bold = Font.Typeface.IsBold;
+            if (Font.Typeface.IsItalic) Italic = Font.Typeface.IsItalic;
+            if (Font.Metrics.UnderlinePosition > 0) UnderLine = GetUnderline(Font);
+        }
+
+        private static eStrikeType GetStrike(SKFont Font)
+        {
+            if (Font.Metrics.StrikeoutPosition == null || Font.Metrics.StrikeoutThickness == null)
+            {
+                return eStrikeType.No;
+            }
+
+            return eStrikeType.Single;
+        }
+
+        private static eUnderLineType GetUnderline(SKFont Font)
+        {
+            if (Font.Metrics.UnderlinePosition == null || Font.Metrics.UnderlineThickness == null)
+            {
+                return eUnderLineType.None;
+            }
+
+            return Font.Metrics.UnderlineThickness > 0 ? eUnderLineType.Heavy : eUnderLineType.Single;
         }
     }
 }

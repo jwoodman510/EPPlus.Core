@@ -40,6 +40,7 @@ using System.IO;
 using OfficeOpenXml.Drawing;
 using OfficeOpenXml.Utils;
 using OfficeOpenXml.Compatibility;
+using SkiaSharp;
 
 namespace OfficeOpenXml
 {    
@@ -122,7 +123,7 @@ namespace OfficeOpenXml
         /// </summary>
         /// <param name="Picture">The image object containing the Picture</param>
         /// <param name="Alignment">Alignment. The image object will be inserted at the end of the Text.</param>
-        public ExcelVmlDrawingPicture InsertPicture(Image Picture, PictureAlignment Alignment)
+        public ExcelVmlDrawingPicture InsertPicture(SKImage Picture, PictureAlignment Alignment)
         {
             string id = ValidateImage(Alignment);
 
@@ -148,14 +149,14 @@ namespace OfficeOpenXml
         {
             string id = ValidateImage(Alignment);
 
-            Image Picture;
+            SKImage Picture;
             try
             {
                 if (!PictureFile.Exists)
                 {
                     throw (new FileNotFoundException(string.Format("{0} is missing", PictureFile.FullName)));
                 }
-                Picture = Image.FromFile(PictureFile.FullName);
+                Picture = SKImage.FromEncodedData(PictureFile.FullName);
             }
             catch (Exception ex)
             {
@@ -176,10 +177,10 @@ namespace OfficeOpenXml
             return AddImage(Picture, id, ii);
         }
 
-        private ExcelVmlDrawingPicture AddImage(Image Picture, string id, ExcelPackage.ImageInfo ii)
+        private ExcelVmlDrawingPicture AddImage(SKImage Picture, string id, ExcelPackage.ImageInfo ii)
         {
-            double width = Picture.Width * 72 / Picture.HorizontalResolution,      //Pixel --> Points
-                   height = Picture.Height * 72 / Picture.VerticalResolution;      //Pixel --> Points
+            double width = Picture.Width * 72 / 96d,      //Pixel --> Points
+                   height = Picture.Height * 72 / 96d;      //Pixel --> Points
             //Add VML-drawing            
             return _ws.HeaderFooter.Pictures.Add(id, ii.Uri, "", width, height);
         }

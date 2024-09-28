@@ -40,6 +40,7 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using OfficeOpenXml.Utils;
 using OfficeOpenXml.Compatibility;
+using SkiaSharp;
 
 namespace OfficeOpenXml.Drawing
 {
@@ -61,7 +62,7 @@ namespace OfficeOpenXml.Drawing
                 Part = drawings.Part.Package.GetPart(UriPic);
                 FileInfo f = new FileInfo(UriPic.OriginalString);
                 ContentType = GetContentType(f.Extension);
-                _image = Image.FromStream(Part.GetStream());
+                _image = SKImage.FromEncodedData(Part.GetStream());
 
 #if (Core)
                 byte[] iby = ImageCompat.GetImageAsByteArray(_image);
@@ -90,7 +91,7 @@ namespace OfficeOpenXml.Drawing
                 }
             }
         }
-        internal ExcelPicture(ExcelDrawings drawings, XmlNode node, Image image, Uri hyperlink) :
+        internal ExcelPicture(ExcelDrawings drawings, XmlNode node, SKImage image, Uri hyperlink) :
             base(drawings, node, "xdr:pic/xdr:nvPicPr/xdr:cNvPr/@name")
         {
             XmlElement picNode = node.OwnerDocument.CreateElement("xdr", "pic", ExcelPackage.schemaSheetDrawings);
@@ -126,7 +127,7 @@ namespace OfficeOpenXml.Drawing
             var package = drawings.Worksheet._package.Package;
             ContentType = GetContentType(imageFile.Extension);
             var imagestream = new FileStream(imageFile.FullName, FileMode.Open, FileAccess.Read);
-            _image = Image.FromStream(imagestream);
+            _image = SKImage.FromEncodedData(imagestream);
 
 #if (Core)
             var img=ImageCompat.GetImageAsByteArray(_image);
@@ -195,26 +196,20 @@ namespace OfficeOpenXml.Drawing
 
             }
         }
-        internal static ImageFormat GetImageFormat(string contentType)
+        internal static SKEncodedImageFormat GetImageFormat(string contentType)
         {
             switch (contentType.ToLower(CultureInfo.InvariantCulture))
             {
                 case "image/bmp":
-                    return ImageFormat.Bmp;
+                    return SKEncodedImageFormat.Bmp;
                 case "image/jpeg":
-                    return ImageFormat.Jpeg;
+                    return SKEncodedImageFormat.Jpeg;
                 case "image/gif":
-                    return ImageFormat.Gif;
+                    return SKEncodedImageFormat.Gif;
                 case "image/png":
-                    return ImageFormat.Png;
-                case "image/x-emf":
-                    return ImageFormat.Emf;
-                case "image/x-tiff":
-                    return ImageFormat.Tiff;
-                case "image/x-wmf":
-                    return ImageFormat.Wmf;
+                    return SKEncodedImageFormat.Png;
                 default:
-                    return ImageFormat.Jpeg;
+                    return SKEncodedImageFormat.Jpeg;
 
             }
         }        //Add a new image to the compare collection
@@ -226,7 +221,7 @@ namespace OfficeOpenXml.Drawing
             //_drawings._pics.Add(newPic);
         }
         #endregion
-        private string SavePicture(Image image)
+        private string SavePicture(SKImage image)
         {
 #if (Core)
             byte[] img = ImageCompat.GetImageAsByteArray(image);
@@ -259,11 +254,11 @@ namespace OfficeOpenXml.Drawing
 
             return RelPic.Id;
         }
-        private void SetPosDefaults(Image image)
+        private void SetPosDefaults(SKImage image)
         {
             EditAs = eEditAs.OneCell;
-            SetPixelWidth(image.Width, image.HorizontalResolution);
-            SetPixelHeight(image.Height, image.VerticalResolution);
+            SetPixelWidth(image.Width, 72);
+            SetPixelHeight(image.Height, 72);
         }
 
         private string PicStartXml()
@@ -302,11 +297,11 @@ namespace OfficeOpenXml.Drawing
         }
 
         internal string ImageHash { get; set; }
-        Image _image = null;
+        SKImage _image = null;
         /// <summary>
         /// The Image
         /// </summary>
-        public Image Image 
+        public SKImage Image 
         {
             get
             {
@@ -332,12 +327,12 @@ namespace OfficeOpenXml.Drawing
                 }
             }
         }
-        ImageFormat _imageFormat=ImageFormat.Jpeg;
+        SKEncodedImageFormat _imageFormat= SKEncodedImageFormat.Jpeg;
         /// <summary>
         /// Image format
         /// If the picture is created from an Image this type is always Jpeg
         /// </summary>
-        public ImageFormat ImageFormat
+        public SKEncodedImageFormat ImageFormat
         {
             get
             {
@@ -372,8 +367,8 @@ namespace OfficeOpenXml.Drawing
                 _width = (int)(_width * ((decimal)Percent / 100));
                 _height = (int)(_height * ((decimal)Percent / 100));
 
-                SetPixelWidth(_width, Image.HorizontalResolution);
-                SetPixelHeight(_height, Image.VerticalResolution);
+                SetPixelWidth(_width, 72);
+                SetPixelHeight(_height, 72);
             }
         }
         internal Uri UriPic { get; set; }

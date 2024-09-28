@@ -40,6 +40,7 @@ using System.Linq;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Table.PivotTable;
 using OfficeOpenXml.Utils;
+using SkiaSharp;
 namespace OfficeOpenXml.Drawing
 {
     /// <summary>
@@ -304,7 +305,7 @@ namespace OfficeOpenXml.Drawing
             /// <param name="Name"></param>
             /// <param name="image">An image. Allways saved in then JPeg format</param>
             /// <returns></returns>
-            public ExcelPicture AddPicture(string Name, Image image)
+            public ExcelPicture AddPicture(string Name, SKImage image)
             {
                return AddPicture(Name, image, null);
             }
@@ -315,7 +316,7 @@ namespace OfficeOpenXml.Drawing
             /// <param name="image">An image. Allways saved in then JPeg format</param>
             /// <param name="Hyperlink">Picture Hyperlink</param>
             /// <returns></returns>
-            public ExcelPicture AddPicture(string Name, Image image, Uri Hyperlink)
+            public ExcelPicture AddPicture(string Name, SKImage image, Uri Hyperlink)
             {
                 if (image != null)
                 {

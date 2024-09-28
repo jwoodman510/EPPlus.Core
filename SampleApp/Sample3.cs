@@ -53,6 +53,7 @@ using OfficeOpenXml;
 using System.Data.SqlClient;
 using System.Drawing;
 using OfficeOpenXml.Style;
+using SkiaSharp;
 
 namespace EPPlusSamples
 {
@@ -86,7 +87,7 @@ namespace EPPlusSamples
                     using (ExcelRange r = worksheet.Cells["A1:G1"])
                     {
                         r.Merge = true;
-                        r.Style.Font.SetFromFont(new Font("Britannic Bold", 22, FontStyle.Italic));
+                        r.Style.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Britannic Bold", SKFontStyle.Italic), 22));
                         r.Style.Font.Color.SetColor(Color.White);
                         r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
                         r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -96,7 +97,7 @@ namespace EPPlusSamples
                     using (ExcelRange r = worksheet.Cells["A2:G2"])
                     {
                         r.Merge = true;
-                        r.Style.Font.SetFromFont(new Font("Britannic Bold", 18, FontStyle.Italic));
+                        r.Style.Font.SetFromFont(new SKFont(SKTypeface.FromFamilyName("Britannic Bold", SKFontStyle.Italic), 18));
                         r.Style.Font.Color.SetColor(Color.Black);
                         r.Style.HorizontalAlignment = ExcelHorizontalAlignment.CenterContinuous;
                         r.Style.Fill.PatternType = ExcelFillStyle.Solid;
