@@ -792,23 +792,6 @@ namespace OfficeOpenXml.Packaging.Ionic.Crc
         {
             throw new NotSupportedException();
         }
-
-#if !Core
-        void IDisposable.Dispose()
-        {
-            Close();
-        }
-
-        /// <summary>
-        /// Closes the stream.
-        /// </summary>
-        public override void Close()
-        {
-            base.Close();
-            if (!_leaveOpen)
-                _innerStream.Close();
-        }
-#endif
     }
 
 }
