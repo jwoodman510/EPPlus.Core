@@ -1022,11 +1022,7 @@ namespace OfficeOpenXml.Packaging.Ionic.Zip
         {
             get
             {
-                #if Core
-                    return System.Text.Encoding.GetEncoding("utf-8");     
-                #else
-                                return System.Text.Encoding.GetEncoding("IBM437");
-                #endif
+                return System.Text.Encoding.GetEncoding("utf-8");
             }
         }
 

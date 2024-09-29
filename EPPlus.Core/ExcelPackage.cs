@@ -46,9 +46,7 @@ using OfficeOpenXml.Utils.CompundDocument;
 using System.Configuration;
 using OfficeOpenXml.Compatibility;
 using System.Text;
-#if (Core)
 using Microsoft.Extensions.Configuration;
-#endif
 namespace OfficeOpenXml
 {
     /// <summary>
@@ -425,11 +423,7 @@ namespace OfficeOpenXml
         }
         internal ImageInfo AddImage(byte[] image, Uri uri, string contentType)
         {
-#if (Core)
             var hashProvider = SHA1.Create();
-#else
-            var hashProvider = new SHA1CryptoServiceProvider();
-#endif
             var hash = BitConverter.ToString(hashProvider.ComputeHash(image)).Replace("-","");
             lock (_images)
             {
@@ -459,11 +453,7 @@ namespace OfficeOpenXml
         }
         internal ImageInfo LoadImage(byte[] image, Uri uri, Packaging.ZipPackagePart imagePart)
         {
-#if (Core)
             var hashProvider = SHA1.Create();
-#else
-            var hashProvider = new SHA1CryptoServiceProvider();
-#endif
             var hash = BitConverter.ToString(hashProvider.ComputeHash(image)).Replace("-", "");
             if (_images.ContainsKey(hash))
             {
@@ -493,11 +483,7 @@ namespace OfficeOpenXml
         }
         internal ImageInfo GetImageInfo(byte[] image)
         {
-#if (Core)
             var hashProvider = SHA1.Create();
-#else
-            var hashProvider = new SHA1CryptoServiceProvider();
-#endif
             var hash = BitConverter.ToString(hashProvider.ComputeHash(image)).Replace("-","");
 
             if (_images.ContainsKey(hash))
@@ -526,7 +512,6 @@ namespace OfficeOpenXml
         private void Init()
         {
             DoAdjustDrawings = true;
-#if (Core)
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);  //Add Support for codepage 1252
 
             var build = new ConfigurationBuilder()
@@ -535,9 +520,7 @@ namespace OfficeOpenXml
             var c = build.Build();
 
             var v = c["EPPlus:ExcelPackage:Compatibility:IsWorksheets1Based"];
-#else
-            var v = ConfigurationManager.AppSettings["EPPlus:ExcelPackage.Compatibility.IsWorksheets1Based"];
-#endif
+
             if (v != null)
             {
                 if(Boolean.TryParse(v.ToLowerInvariant(), out bool value))
@@ -1213,11 +1196,8 @@ namespace OfficeOpenXml
             this._workbook = null;
         }
         static object _lock=new object();
-#if (Core)
+
         internal int _worksheetAdd=0;
-#else
-        internal int _worksheetAdd=1;
-#endif
         /// <summary>
         /// Copies the input stream to the output stream.
         /// </summary>

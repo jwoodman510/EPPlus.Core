@@ -100,12 +100,7 @@ namespace OfficeOpenXml.VBA
                 uint endel2 = br.ReadUInt32();  //0
                 ushort rgchProjectNameBuffer = br.ReadUInt16();
                 ushort rgchTimestampBuffer = br.ReadUInt16();
-#if Core
                 Verifier = new EnvelopedCms();
-#else
-                Verifier = new SignedCms();
-#endif
-                Verifier.Decode(signature);
             }
             else
             {
@@ -236,9 +231,7 @@ namespace OfficeOpenXml.VBA
                 }
                 finally
                 {
-                    #if Core
-                        store.Dispose();
-                    #endif
+                    store.Dispose();
                     store.Close();
                 }
             }
@@ -314,17 +307,10 @@ namespace OfficeOpenXml.VBA
 
             ContentInfo contentInfo = new ContentInfo(((MemoryStream)bw.BaseStream).ToArray());
             contentInfo.ContentType.Value = "1.3.6.1.4.1.311.2.1.4";
-#if (Core)
             Verifier = new EnvelopedCms(contentInfo);
             var r = new CmsRecipient(Certificate);            
             Verifier.Encrypt(r);
             return Verifier.Encode();
-#else
-            Verifier = new SignedCms(contentInfo);
-            var signer = new CmsSigner(Certificate);
-            Verifier.ComputeSignature(signer, false);
-            return Verifier.Encode();
-#endif
         }
 
         private byte[] GetContentHash(ExcelVbaProject proj)
@@ -389,11 +375,8 @@ namespace OfficeOpenXml.VBA
         /// <summary>
         /// The verifier
         /// </summary>
-#if Core
+
         public EnvelopedCms Verifier { get; internal set; }
-#else
-        public SignedCms Verifier { get; internal set; }
-#endif
         internal CompoundDocument Signature { get; set; }
         internal Packaging.ZipPackagePart Part { get; set; }
         internal Uri Uri { get; private set; }

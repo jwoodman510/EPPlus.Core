@@ -47,7 +47,7 @@ namespace OfficeOpenXml.Compatibility
         {
             this.excelPackage = excelPackage;
         }
-#if Core
+
         /// <summary>
         /// If the worksheets collection of the ExcelWorkbook class is 1 based.
         /// This property can be set from appsettings.json file.
@@ -63,19 +63,6 @@ namespace OfficeOpenXml.Compatibility
         ///     }
         /// </code>
         /// </summary>
-#else
-        /// <summary>
-        /// If the worksheets collection of the ExcelWorkbook class is 1 based.
-        /// This property can be set from app.config file.
-        /// <code>
-        ///   <appSettings>
-        ///    <!--Set worksheets collection to start from zero.Default is 1, for backward compatibility reasons -->  
-        ///    <add key = "EPPlus:ExcelPackage.Compatibility.IsWorksheets1Based" value="false" />
-        ///   </appSettings>
-        /// </code>
-        /// </summary>
-#endif
-
         public bool IsWorksheets1Based
         {
             get
